@@ -1,5 +1,5 @@
 ---
-title: {{Private Legal Document Summarizer}}
+title: {{title}}
 emoji: {{emoji}}
 colorFrom: {{colorFrom}}
 colorTo: {{colorTo}}
