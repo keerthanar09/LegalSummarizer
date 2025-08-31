@@ -7,7 +7,7 @@ from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFacePipeline
 from vertexai.generative_models import GenerativeModel, GenerationConfig
-import gradio as gr
+# import gradio as gr
 from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 import uvicorn
@@ -107,13 +107,13 @@ def process_file(file_obj):
         return "Please upload a document."
     return summarize_document(file_obj.name)
 
-demo = gr.Interface(
-    fn=process_file,
-    inputs=gr.File(label="Upload a document", file_types=[".txt", ".md", ".pdf"]),
-    outputs="text",
-    title="Legal Document Summarizer",
-    description="Upload a document. The app will anonymize sensitive info and summarize it."
-)
+# demo = gr.Interface(
+#     fn=process_file,
+#     inputs=gr.File(label="Upload a document", file_types=[".txt", ".md", ".pdf"]),
+#     outputs="text",
+#     title="Legal Document Summarizer",
+#     description="Upload a document. The app will anonymize sensitive info and summarize it."
+# )
 
 app = FastAPI()
 
@@ -127,9 +127,12 @@ async def summarize_api(file: UploadFile = File(...)):
     os.remove(file_path)
     return {"summary": summary}
 
+# if __name__ == "__main__":
+#     import sys
+#     if "api" in sys.argv:  # run as API
+#         uvicorn.run(app, host="0.0.0.0", port=8000)
+#     else:  # run as Gradio UI
+#         demo.launch()
+
 if __name__ == "__main__":
-    import sys
-    if "api" in sys.argv:  # run as API
-        uvicorn.run(app, host="0.0.0.0", port=8000)
-    else:  # run as Gradio UI
-        demo.launch()
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
