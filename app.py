@@ -117,6 +117,10 @@ def process_file(file_obj):
 
 app = FastAPI()
 
+@app.get("/")
+def home():
+    return {"message": "Hello Cloud Run!"}
+
 @app.post("/summarize/")
 async def summarize_api(file: UploadFile = File(...)):
     file_path = f"temp_{file.filename}"
@@ -134,5 +138,5 @@ async def summarize_api(file: UploadFile = File(...)):
 #     else:  # run as Gradio UI
 #         demo.launch()
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
