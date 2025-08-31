@@ -1,2 +1,10 @@
-# LegalSummarizer
-Built using Python, packages and APIs including LangChain, Gemma, and Vertex AI to summarize private legal documents such as company policies. 
+---
+title: {{Private Legal Document Summarizer}}
+emoji: {{emoji}}
+colorFrom: {{colorFrom}}
+colorTo: {{colorTo}}
+sdk: {{sdk}}
+sdk_version: "{{sdkVersion}}"
+app_file: app.py
+pinned: false
+---
