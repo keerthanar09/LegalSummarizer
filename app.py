@@ -131,12 +131,3 @@ async def summarize_api(file: UploadFile = File(...)):
     os.remove(file_path)
     return {"summary": summary}
 
-# if __name__ == "__main__":
-#     import sys
-#     if "api" in sys.argv:  # run as API
-#         uvicorn.run(app, host="0.0.0.0", port=8000)
-#     else:  # run as Gradio UI
-#         demo.launch()
-
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
