@@ -2,7 +2,7 @@ import requests
 
 url = "https://legalsummarizer-138485278829.us-central1.run.app/summarize/"
 
-files = {"file": open("companyPolicies.txt", "rb")}  # replace with your doc
+files = {"file": open("companyPolicies.txt", "rb")}
 response = requests.post(url, files=files)
 
 print(response.text)
