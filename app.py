@@ -11,6 +11,7 @@ from vertexai.generative_models import GenerativeModel, GenerationConfig
 from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 import uvicorn
+from langchain.schema import Document
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -82,9 +83,28 @@ def summarizer(texts):
     )
     return response.text
 
-def summarize_document(file_path: str):
-    loader = TextLoader(file_path, encoding="utf-8")
-    documents = loader.load()
+# def summarize_document(file_path: str):
+#     loader = TextLoader(file_path, encoding="utf-8")
+#     documents = loader.load()
+
+#     text_splitter = RecursiveCharacterTextSplitter(
+#         chunk_size=7000,
+#         chunk_overlap=50,
+#         separators=["\n\n", "\n", " ", ""]
+#     )
+#     texts = text_splitter.split_documents(documents)
+
+#     safe_chunks = []
+#     for doc in texts:
+#         safe_text = pii_filter(doc.page_content)
+#         doc.page_content = safe_text
+#         safe_chunks.append(doc)
+
+#     summary = summarizer(safe_chunks)
+#     return summary
+
+def summarize_text(text: str):
+    documents = [Document(page_content=text)]
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=7000,
@@ -102,10 +122,10 @@ def summarize_document(file_path: str):
     summary = summarizer(safe_chunks)
     return summary
 
-def process_file(file_obj):
-    if file_obj is None:
-        return "Please upload a document."
-    return summarize_document(file_obj.name)
+# def process_file(file_obj):
+#     if file_obj is None:
+#         return "Please upload a document."
+#     return summarize_document(file_obj.name)
 
 # demo = gr.Interface(
 #     fn=process_file,
@@ -121,13 +141,19 @@ app = FastAPI()
 def home():
     return {"message": "Hello Cloud Run!"}
 
-@app.post("/summarize/")
-async def summarize_api(file: UploadFile = File(...)):
-    file_path = f"temp_{file.filename}"
-    with open(file_path, "wb") as f:
-        f.write(await file.read())
+class TextInput(BaseModel):
+    text: str
 
-    summary = summarize_document(file_path)
-    os.remove(file_path)
+@app.post("/summarize/")
+# async def summarize_api(file: UploadFile = File(...)):
+#     file_path = f"temp_{file.filename}"
+#     with open(file_path, "wb") as f:
+#         f.write(await file.read())
+
+#     summary = summarize_document(file_path)
+#     os.remove(file_path)
+#     return {"summary": summary}
+async def summarize_json(input: TextInput):
+    summary = summarize_text(input.text)
     return {"summary": summary}
 
